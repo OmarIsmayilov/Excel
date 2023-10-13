@@ -4,7 +4,7 @@ Implementation:
 
 
     dependencies {
-
-    implementation("com.itextpdf:itextg:5.5.10")
+        ...
+        implementation("com.itextpdf:itextg:5.5.10")
 
     }
