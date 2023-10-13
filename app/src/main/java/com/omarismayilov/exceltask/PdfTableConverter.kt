@@ -3,7 +3,6 @@ package com.omarismayilov.exceltask
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.os.Environment
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.itextpdf.text.Document
@@ -19,17 +18,18 @@ import java.io.FileOutputStream
 
 class PdfTableConverter<T>(private val context: Context) {
 
-    fun createPdfFileFromExcel(
+    fun generatePdfFile(
+        pdfName: String,
+        pdfDirectory: File,
         data: List<T>,
         columnNames: Array<String>,
         cellProviders: List<(T) -> String>,
         onResult: (result: Boolean) -> Unit,
     ) {
         return try {
-            val pdfName = "pdf_${System.currentTimeMillis()}.pdf"
             val pdfFile = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                pdfName
+                pdfDirectory,
+                "$pdfName.pdf"
             )
             val pdfStream = FileOutputStream(pdfFile)
             val document = Document()
@@ -44,7 +44,9 @@ class PdfTableConverter<T>(private val context: Context) {
         } catch (e: Exception) {
             Log.e("PDF_TABLE_CONVERTER", "$e")
             onResult(false)
+
         }
+
     }
 
     private fun addImageToPdf(
@@ -92,12 +94,13 @@ class PdfTableConverter<T>(private val context: Context) {
         val columnCount = columnNames.size
         val table = PdfPTable(columnCount)
 
-        for (columnName in columnNames) {
+        columnNames.forEach { columnName ->
             val cell = PdfPCell(Phrase(columnName))
             table.addCell(cell)
         }
-        for (item in data) {
-            for (cellProvider in cellProviders) {
+
+        data.forEach { item ->
+            cellProviders.forEach { cellProvider ->
                 val cell = PdfPCell(Phrase(cellProvider(item)))
                 table.addCell(cell)
             }

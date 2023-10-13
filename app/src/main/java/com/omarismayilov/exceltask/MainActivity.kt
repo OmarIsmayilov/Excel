@@ -5,6 +5,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -36,7 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnGenerate.setOnClickListener {
             if (checkPermissions()) {
-                converter.createPdfFileFromExcel(
+
+                converter.generatePdfFile(
+                    pdfName = "task_123456",
+                    pdfDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                     data = data,
                     columnNames = arrayOf("Product id", "Product Name", "Product price"),
                     cellProviders = listOf(
@@ -46,16 +50,13 @@ class MainActivity : AppCompatActivity() {
                     ),
                     onResult = {
                         if (it) {
-                            showToast("Generated")
+                            Toast.makeText(this, "Generated", Toast.LENGTH_SHORT).show()
                         }
                     }
                 )
+
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun checkPermissions(): Boolean {
