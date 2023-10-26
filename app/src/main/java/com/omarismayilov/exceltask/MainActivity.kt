@@ -9,10 +9,11 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.omarismayilov.exceltask.databinding.ActivityMainBinding
 
 
-data class Product(val id: String, val name: String, val price: Double)
+data class Product(val id: String, val name: String, val category: String, val price: Double)
 
 class MainActivity : AppCompatActivity() {
     private val PERMISSION_CODE = 101
@@ -28,32 +29,59 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestPermission()
         }
-
         val data = List(200) {
-            Product(id = "${it + 1}", name = "Product ${it + 1}", price = (it + 1) * 10.0)
+            Product(
+                id = "${it + 1}",
+                name = "Product ${it + 1}",
+                category = "Category",
+                price = (it + 1) * 10.0
+            )
         }
 
-        val converter = PdfTableConverter<Product>(this)
+        val infoMap = mapOf(
+            "Cari (kod/ad)" to "12546/EXAMPLE COMPANY NAME",
+            "Qaimə №" to "565498",
+            "Filial" to "00086000000473456",
+            "İstifadəçi" to "Example user",
+            "Tarix" to "20.02.2023",
+        )
 
-        binding.btnGenerate.setOnClickListener {
-            if (checkPermissions()) {
 
-                converter.generatePdfFile(
-                    pdfName = "task_123456",
-                    pdfDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    data = data,
-                    columnNames = arrayOf("Product id", "Product Name", "Product price"),
-                    cellProviders = listOf(
-                        { product: Product -> product.id },
-                        { product: Product -> product.name },
-                        { product: Product -> product.price.toString() }
-                    ),
-                    onResult = {
-                        if (it) {
-                            Toast.makeText(this, "Generated", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+        if (checkPermissions()) {
+            binding.btnGenerate.setOnClickListener {
+                val generator = PdfTableConverter<Product>(
+                    this,
+                    "task_1234567",
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 )
+
+                generator.apply {
+                    /*   addPrimaryLogo()
+                    addAdditionalLogo()
+                    addCompanyName("")
+                    addBarcode("12345XXX5841X64158641XXXX6541")
+                    addInfoTable(infoMap)
+                    addDataTable(
+                        data = data,
+                        columnNames = arrayOf(
+                            "Product id",
+                            "Product Name",
+                            "Product Category",
+                            "Product price"
+                        ),
+                        cellProviders = listOf(
+                            { product: Product -> product.id },
+                            { product: Product -> product.name },
+                            { product: Product -> product.category },
+                            { product: Product -> product.price.toString() }
+                        )
+                    )
+                    closePdf()
+                }
+
+                Toast.makeText(this@MainActivity,"Generated",Toast.LENGTH_SHORT).show()*/
+                }
+
 
             }
         }
