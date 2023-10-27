@@ -54,8 +54,8 @@ class PdfTableConverter<T>(
         val imageDrawable = ContextCompat.getDrawable(context, drawableResId)
         val imageBitmap = (imageDrawable as BitmapDrawable).bitmap
 
-        var imageWidth = 55f
-        var imageHeight = 55f
+        var imageWidth = 250f
+        var imageHeight = 60f
 
         size?.let {
             imageWidth = size[0]
@@ -94,6 +94,9 @@ class PdfTableConverter<T>(
         table.widthPercentage = 100f
         table.defaultCell.border = Rectangle.NO_BORDER
         table.isSplitLate = false
+
+        val columnWidths = floatArrayOf(10f, 20f, 10f, 20f)
+        table.setWidths(columnWidths)
 
         table.spacingBefore = 60f
 
@@ -182,7 +185,7 @@ class PdfTableConverter<T>(
         logoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream2)
         val imageBytes2 = stream2.toByteArray()
         val image2 = Image.getInstance(imageBytes2)
-
+        image2.backgroundColor = BaseColor.WHITE
         image2.scaleAbsolute(imageWidth, imageHeight)
 
         val x2 = pageWidth - imageWidth - 30f
@@ -234,6 +237,7 @@ class PdfTableConverter<T>(
         val table = PdfPTable(columnCount)
 
         table.spacingBefore = 40f
+
 
         columnNames.forEach { columnName ->
             val cell = PdfPCell(Phrase(columnName))

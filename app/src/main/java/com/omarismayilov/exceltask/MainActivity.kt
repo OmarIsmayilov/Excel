@@ -55,10 +55,12 @@ class MainActivity : AppCompatActivity() {
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 )
 
-                generator.apply {
-                    /*   addPrimaryLogo()
+                /*generator.apply {
+                    *//*addPrimaryLogo()
+                    addAdditionalLogo()*//*
+                    addPrimaryLogo()
                     addAdditionalLogo()
-                    addCompanyName("")
+                    addCompanyName("Company Name ")
                     addBarcode("12345XXX5841X64158641XXXX6541")
                     addInfoTable(infoMap)
                     addDataTable(
@@ -79,13 +81,13 @@ class MainActivity : AppCompatActivity() {
                     closePdf()
                 }
 
-                Toast.makeText(this@MainActivity,"Generated",Toast.LENGTH_SHORT).show()*/
-                }
-
+                Toast.makeText(this@MainActivity,"Generated",Toast.LENGTH_SHORT).show()
+                */
+            }
 
             }
         }
-    }
+
 
     private fun checkPermissions(): Boolean {
         val writeStoragePermission = ContextCompat.checkSelfPermission(
